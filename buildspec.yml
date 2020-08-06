@@ -11,8 +11,3 @@ phases:
   post_build:
     commands:
       - aws s3 sync dist/ s3://$BUCKET_NAME --delete
-artifacts:
-    type: zip
-    base-directory: dist
-    files:
-        - '**/*'
