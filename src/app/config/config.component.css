@@ -1,0 +1,32 @@
+form {
+    margin-right: auto;
+    margin-left: auto;
+    width: max-content;
+}
+
+form > input {
+    width: 15%;
+    margin-right: 2%;
+}
+
+#modes {
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+}
+
+.notes {
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+}
+
+#update, #submit, #melody, #octaves, #response, #input, #control{
+    margin-right: auto;
+    margin-left: auto;
+    width: fit-content;
+}
+
+#response {
+    height: 50px;
+}

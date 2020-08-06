@@ -1,0 +1,128 @@
+<app-learner></app-learner>
+<form #config="ngForm" class="form-control">
+  <input id="numberOfNotes" type="text" placeholder="# of notes" [(ngModel)]="numberOfNotes" name="numberOfNotes">
+  <select id="seconds" name="seconds" #speed>
+    <option *ngFor="let sec of seconds" [value]="sec">{{sec}}</option>
+  </select>
+</form>
+
+<div id="modes">
+  <select id="roots" #rootValue>
+    <option *ngFor="let root of selectRoots" [value]="root">{{root}}</option>
+  </select>
+  <select id="scales" #scaleValue>
+    <option *ngFor="let scale of selectScales" [value]="scale">{{scale}}</option>
+  </select>
+  
+  <button (click)="setMode(false)">{{buttonMode}}</button>
+</div>
+
+<!--
+<input id="relative" type="radio">
+<label for="mixed-rhythm">Relative Mode</label>
+<br />-->
+<br />
+
+<ng-container *ngIf="perfect; else display">
+  <div class="notes">
+    
+    <button #cStat (click)="updateNotes('C', cStat)" value="true">C</button>
+    <button #csStat (click)="updateNotes('C#', csStat)" value="true">C#</button>
+    <button #dStat (click)="updateNotes('D', dStat)" value="true">D</button>
+    <button #dsStat (click)="updateNotes('D#', dsStat)" value="true">D#</button>
+    <button #eStat (click)="updateNotes('E', eStat)" value="true">E</button>
+    <button #fStat (click)="updateNotes('F', fStat)" value="true">F</button>
+    <button #fsStats (click)="updateNotes('F#', fsStat)" value="true">F#</button>
+    <button #gStats (click)="updateNotes('G', gStat)" value="true">G</button>
+    <button #gsStat (click)="updateNotes('G#', gsStat)" value="true">G#</button>
+    <button #aStat (click)="updateNotes('A', aStat)" value="true">A</button>
+    <button #asStat (click)="updateNotes('A#', asStat)" value="true">A#</button>
+    <button #bStat (click)="updateNotes('B', bStat)" value="true">B</button>
+
+  </div>
+  <div>
+    <button #cSubmit (click)="checkAsYouGo(this.lowerCase.transform(cSubmit.value))" value="C">C (A)</button>
+    <button #csSubmit (click)="checkAsYouGo(this.lowerCase.transform(csSubmit.value))" value="C#">C# (W)</button>
+    <button #dSubmit (click)="checkAsYouGo(this.lowerCase.transform(dSubmit.value))" value="D">D (S)</button>
+    <button #dsSubmit (click)="checkAsYouGo(this.lowerCase.transform(dsSubmit.value))" value="D#">D# (E)</button>
+    <button #eSubmit (click)="checkAsYouGo(this.lowerCase.transform(eSubmit.value))" value="E">E (D)</button>
+    <button #fSubmit (click)="checkAsYouGo(this.lowerCase.transform(fSubmit.value))" value="F">F (F)</button>
+    <button #fsSubmit (click)="checkAsYouGo(this.lowerCase.transform(fsSubmit.value))" value="F#">F# (T)</button>
+    <button #gSubmit (click)="checkAsYouGo(this.lowerCase.transform(gSubmit.value))" value="G">G (G)</button>
+    <button #gsSubmit (click)="checkAsYouGo(this.lowerCase.transform(gsSubmit.value))" value="G#">G# (Y)</button>
+    <button #aSubmit (click)="checkAsYouGo(this.lowerCase.transform(aSubmit.value))" value="A">A (H)</button>
+    <button #asSubmit (click)="checkAsYouGo(this.lowerCase.transform(asSubmit.value))" value="A#">A# (U)</button>
+    <button #bSubmit (click)="checkAsYouGo(this.lowerCase.transform(bSubmit.value))" value="B">B (J)</button>
+
+
+  </div>
+</ng-container>
+  
+
+
+
+<br />
+<div class="notes">
+  <ng-template #display>
+    <div id="update">
+      <button #do (click)="updateNotes(1, do)" value="true">do</button>
+      <button #re (click)="updateNotes(2, re)" value="true">re</button>
+      <button #mi (click)="updateNotes(3, mi)" value="true">mi</button>
+      <button #fa (click)="updateNotes(4, fa)" value="true">fa</button>
+      <button #so (click)="updateNotes(5, so)" value="true">so</button>
+      <button #la (click)="updateNotes(6, la)" value="true">la</button>
+      <button #ti (click)="updateNotes(7, ti)" value="true">ti</button>
+    </div>
+    <div id="submit">
+      <button #doSubmit (click)="checkAsYouGo(doSubmit.value)" value="1">do (1)</button>
+      <button #reSubmit (click)="checkAsYouGo(reSubmit.value)" value="2">re (2)</button>
+      <button #miSubmit (click)="checkAsYouGo(miSubmit.value)" value="3">mi (3)</button>
+      <button #faSubmit (click)="checkAsYouGo(faSubmit.value)" value="4">fa (4)</button>
+      <button #soSubmit (click)="checkAsYouGo(soSubmit.value)" value="5">so (5)</button>
+      <button #laSubmit (click)="checkAsYouGo(laSubmit.value)" value="6">la (6)</button>
+      <button #tiSubmit (click)="checkAsYouGo(tiSubmit.value)" value="7">ti (7)</button>
+    </div>
+  </ng-template>
+</div>
+
+
+<br />
+
+<!-- <button id="mix-rhythm" (click)="mixRhythm()">Mix Rhythm</button> -->
+<!-- <button id="mix-notes" (click)="mixNotes(two.checked)">Mix Notes</button>
+<input type="radio" name="mixers" #two checked/><label>2 notes</label>
+<input type="radio" name="mixers" #three/><label>3 notes</label> -->
+<!--
+<input id="mixed-rhythm" type="checkbox" [(ngModel)]="mixedRhythm">
+<label for="mixed-rhythm">Mixed Rhythm</label>
+<input id="mixed-notes" type="checkbox" [(ngModel)]="mixedNotes">
+<label for="mixed-notes">Mixed Notes</label>-->
+<div id="melody">
+  <button (click)="melodyDelegator(speed.value, rootValue.value, scaleValue.value)">Make Melody</button>
+  <input type="checkbox" [(ngModel)]="learnerOn" name="learner"/><label>Learner</label>  
+</div>
+<br />
+<div id="octaves">
+  <button #octave1 (click)="updateOctaves(1, octave1)" value="true">1st</button>
+  <button #octave2 (click)="updateOctaves(2, octave2)" value="true">2nd</button>
+  <button #octave3 (click)="updateOctaves(3, octave3)" value="true">3rd</button>
+  <button #octave4 (click)="updateOctaves(4, octave4)" value="true">4th</button>
+  <button #octave5 (click)="updateOctaves(5, octave5)" value="true">5th</button>
+  <button #octave6 (click)="updateOctaves(6, octave6)" value="true">6th</button>
+
+</div>
+<br />
+
+<p id="response" #fields></p>
+<!--<input type="textbox" (keyup)="checkAsYouGo(response)" #response/>[(ngModel)]="guess"/>-->
+<p id="input">Your Response: {{ inputValues }}</p>
+<!--<p id="assessment">Correct Response: </p>-->
+<!--<p id="number-assessment"></p>-->
+<!--<button (click)="checkAnswer()">Submit</button>-->
+<div id="control">
+  <button (click)="reset()">Reset</button>
+  <button (click)="play()">Play</button>
+  
+</div>
+
+<!-- [(ngModel)]="seconds" #seconds="ngModel"-->
