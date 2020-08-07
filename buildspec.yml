@@ -17,8 +17,11 @@ phases:
     commands:
         - echo Build started 
         - ng build --prod
+  post_build:
+    commands:
+        - aws s3 sync dist/ear-trainer/ s3://${S3_BUCKET} --delete
 artifacts:
     files:
-        - '**/*'
+        - '**/**'
     base-directory: 'dist*'
     discard-paths: yes
