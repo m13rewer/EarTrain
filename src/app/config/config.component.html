@@ -57,9 +57,6 @@
 
   </div>
 </ng-container>
-  
-
-
 
 <br />
 <div class="notes">
@@ -87,6 +84,15 @@
 
 
 <br />
+<div id="octaves">
+  <!-- <button #octave1 (click)="updateOctaves(1, octave1)" value="true">1st</button>
+  <button #octave2 (click)="updateOctaves(2, octave2)" value="true">2nd</button>
+  <button #octave3 (click)="updateOctaves(3, octave3)" value="true">3rd</button> -->
+  <button #octave4 (click)="updateOctaves(4, octave4)" value="true">4th</button>
+  <button #octave5 (click)="updateOctaves(5, octave5)" value="true">5th</button>
+  <button #octave6 (click)="updateOctaves(6, octave6)" value="true">6th</button>
+
+</div>
 
 <!-- <button id="mix-rhythm" (click)="mixRhythm()">Mix Rhythm</button> -->
 <!-- <button id="mix-notes" (click)="mixNotes(two.checked)">Mix Notes</button>
@@ -102,15 +108,7 @@
   <input type="checkbox" [(ngModel)]="learnerOn" name="learner"/><label>Learner</label>  
 </div>
 <br />
-<div id="octaves">
-  <button #octave1 (click)="updateOctaves(1, octave1)" value="true">1st</button>
-  <button #octave2 (click)="updateOctaves(2, octave2)" value="true">2nd</button>
-  <button #octave3 (click)="updateOctaves(3, octave3)" value="true">3rd</button>
-  <button #octave4 (click)="updateOctaves(4, octave4)" value="true">4th</button>
-  <button #octave5 (click)="updateOctaves(5, octave5)" value="true">5th</button>
-  <button #octave6 (click)="updateOctaves(6, octave6)" value="true">6th</button>
 
-</div>
 <br />
 
 <p id="response" #fields></p>

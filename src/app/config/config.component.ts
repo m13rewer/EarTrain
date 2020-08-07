@@ -825,7 +825,7 @@ export class ConfigComponent implements OnInit {
     this.index = 0;
     let i: number;
     let melody = this.melody;
-    
+    console.log(this.melody);
     this.timeInterval = this.melody[this.index].duration;
 
     for(i = 0; i < this.melody.length; i++){
@@ -865,7 +865,7 @@ export class ConfigComponent implements OnInit {
     }
   }
 
-  sleeper(milliseconds){
+  sleeper(milliseconds: number){
     console.log("sleeper()");
 
     return new Promise(resolve => setTimeout(resolve, milliseconds));
