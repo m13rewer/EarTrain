@@ -161,7 +161,7 @@ export class ConfigComponent implements OnInit {
   }
 
   setOctaves() {
-    const octaves: number[] = [1, 2, 3, 4, 5, 6];
+    const octaves: number[] = [4, 5, 6];
     this.octavesLinkedList = this.octavesLinkedList.fromArray(octaves);
     this.learner.setOctaves(octaves);
   }
