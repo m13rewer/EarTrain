@@ -58,6 +58,7 @@ export class ConfigComponent implements OnInit {
   public StatStore: StatStore;
   public learnerOn: boolean;
   public keyArray: string[];
+  public solfege: string[];
 
   constructor(private rendererFactory: RendererFactory2, private renderer: Renderer2, private shortCuts: ShortCutsPipe, private lowerCase: LowerCasePipe) { }
   
@@ -120,7 +121,8 @@ export class ConfigComponent implements OnInit {
     this.learner = new LearnerComponent(this.rendererFactory);
     this.StatStore = new StatStore(new Map<string, number>());
     this.learnerOn = false;
-    
+    this.solfege = ['do', 're', 'me', 'fa', 'so', 'la', 'ti'];
+
     this.setSeconds();
     this.setRoots();
     this.setScales();
@@ -171,6 +173,18 @@ export class ConfigComponent implements OnInit {
     this.perfect = (this.perfect === bool);
     this.buttonMode = (this.perfect ? 'Perfect': 'Relative');
     //console.log(this.perfect);
+  }
+
+  changeSolfege(stat: any){
+    //stat.value;
+    this.scale = stat.value;
+    if(this.scale === "Major") this.solfege = ['do', 're', 'mi', 'fa', 'so', 'la', 'ti'];
+    if(this.scale === "Minor") this.solfege = ['do', 're', 'me', 'fa', 'so', 'le', 'te'];
+    if(this.scale === "Blues") this.solfege = ['do', 're', 'ri', 'mi', 'so', 'la'];
+
+    this.keyScale = this.scale;//this.solfege.toString().replace(/,/gi, '');
+    
+    console.log("it works "+ stat.value);
   }
 
   setSounds(){
@@ -264,9 +278,7 @@ export class ConfigComponent implements OnInit {
     this.countDown = 0;
     this.melody = [];
     this.notesLinkedList = new LinkedList<string>();
-    //console.log(this.notesLinkedList);
     this.setNotes();
-    
     
   }
 
@@ -552,7 +564,7 @@ export class ConfigComponent implements OnInit {
       case 'Minor':
         return [2, 1, 2, 2, 1, 2];
       case 'Blues':
-        return [2, 1, 1, 3, 2, 3];
+        return [2, 1, 1, 3, 2];
       default:
         return [2, 2, 1, 2, 2, 2];
     }
@@ -660,6 +672,7 @@ export class ConfigComponent implements OnInit {
     console.log("mapToScaleDegree()");
     //console.log(newNotes);
     //this.learner = new LearnerComponent(this.rendererFactory);
+    console.log(newNotes);
     this.keyArray = newNotes;
     this.learner.setKeyArray(this.keyArray); //set key array for learner
     return newNotes; 

@@ -1,7 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-app-config > {
+app-config {
     display: block;
     margin-right: auto;
     margin-left: auto;
+    width: 500px;
+}
+
+
+body {
+    padding: 10%;
+    font-family: Arial, sans-serif;
+    font-weight: 100;
+    color: darkslategrey;
 }
 
