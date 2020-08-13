@@ -1,13 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Renderer2 } from '@angular/core';
-
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ConfigComponent } from './config/config.component';
-import { FormsModule }   from '@angular/forms';
 import { ShortCutsPipe } from './short-cuts.pipe';
 import { LowerCasePipe } from '@angular/common';
 import { LearnerComponent } from './learner/learner.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
+const appRoutes: Routes = [
+  { path: 'config', component: ConfigComponent }
+];
 
 @NgModule({
   declarations: [
@@ -18,7 +22,12 @@ import { LearnerComponent } from './learner/learner.component';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    RouterModule.forRoot(
+      appRoutes,
+    ),
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
 
   ],
   providers: [ShortCutsPipe, LowerCasePipe, ConfigComponent],

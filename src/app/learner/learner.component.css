@@ -1,0 +1,15 @@
+.anim {
+    white-space: pre-wrap;
+    color: rgb(126, 214, 43);
+    /* color: red; */
+    line-height: 10px;
+    margin: 0;
+}
+
+#anima {
+    color: red;
+    margin-top: 50px;
+    height: 200px;
+    /* line-height: 12px; */
+    white-space: pre-wrap;
+}

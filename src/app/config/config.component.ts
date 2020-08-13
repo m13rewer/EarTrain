@@ -6,7 +6,7 @@ import * as createjs from 'createjs-module';
 import { Sounds } from '../shared/sounds';
 import { ShortCutsPipe } from '../short-cuts.pipe';
 import { LowerCasePipe } from '@angular/common';
-import { LearnerComponent } from '../learner/learner.component';
+import { LearnerService } from '../shared/learner.service';
 import { StatStore } from '../shared/stat-store';
 
 @Component({
@@ -54,13 +54,14 @@ export class ConfigComponent implements OnInit {
   public spanMatrix: HTMLElement[][];
   public addNotes: boolean;
   public learnerAssessor: boolean[][];
-  public learner: LearnerComponent;
+  public learner: LearnerService;
   public StatStore: StatStore;
   public learnerOn: boolean;
   public keyArray: string[];
   public solfege: string[];
+  public scalePlay: string[];
 
-  constructor(private rendererFactory: RendererFactory2, private renderer: Renderer2, private shortCuts: ShortCutsPipe, private lowerCase: LowerCasePipe) { }
+  constructor(private renderer: Renderer2, private shortCuts: ShortCutsPipe, private lowerCase: LowerCasePipe) { }
   
   @ViewChild('fields') private el: ElementRef;
   @HostListener('window:keydown', ['$event'])
@@ -71,6 +72,12 @@ export class ConfigComponent implements OnInit {
     }else if(this.count === this.melody.length){
       this.count = 0;
       return;
+    }
+
+    console.log(event.key);
+
+    if(event.key === " " && this.melody){
+      this.play();
     }
 
     switch(this.shortCuts.transform(event.key)){
@@ -117,8 +124,7 @@ export class ConfigComponent implements OnInit {
     this.addNotes = true;
     //this.learner.ngOnInit();// = new LearnerComponent(this.rendererFactory).ngOnInit();
     this.learnerAssessor = [[],[],[]];
-    
-    this.learner = new LearnerComponent(this.rendererFactory);
+    this.learner = new LearnerService();
     this.StatStore = new StatStore(new Map<string, number>());
     this.learnerOn = false;
     this.solfege = ['do', 're', 'me', 'fa', 'so', 'la', 'ti'];
@@ -128,6 +134,7 @@ export class ConfigComponent implements OnInit {
     this.setScales();
     this.setNotes();
     this.setOctaves();   
+
   }
 
   setSeconds() {
@@ -177,14 +184,30 @@ export class ConfigComponent implements OnInit {
 
   changeSolfege(stat: any){
     //stat.value;
-    this.scale = stat.value;
-    if(this.scale === "Major") this.solfege = ['do', 're', 'mi', 'fa', 'so', 'la', 'ti'];
-    if(this.scale === "Minor") this.solfege = ['do', 're', 'me', 'fa', 'so', 'le', 'te'];
-    if(this.scale === "Blues") this.solfege = ['do', 're', 'ri', 'mi', 'so', 'la'];
-
-    this.keyScale = this.scale;//this.solfege.toString().replace(/,/gi, '');
+    this.keyScale = stat.value;
+    if(this.keyScale === "Major") this.solfege = ['do', 're', 'mi', 'fa', 'so', 'la', 'ti'];
+    if(this.keyScale === "Minor") this.solfege = ['do', 're', 'me', 'fa', 'so', 'le', 'te'];
+    if(this.keyScale === "Blues") this.solfege = ['do', 're', 'ri', 'mi', 'so', 'la'];
     
-    console.log("it works "+ stat.value);
+    //this.keyScale = this.scale;//this.solfege.toString().replace(/,/gi, '');
+    
+    console.log("it works "+ this.keyScale);
+  }
+
+  async playTheScale(){
+
+    this.scalePlay = [];
+    this.keyArray.forEach(element => {
+      this.scalePlay.push(element+5);
+    });
+
+    //this.scalePlay
+    for(let i = 0; i < this.scalePlay.length; i++){
+      await this.sleeper(100);
+      this.loadHandler(this.scalePlay[i]);
+    }
+
+    return await this.sleeper(1500);
   }
 
   setSounds(){
@@ -239,7 +262,7 @@ export class ConfigComponent implements OnInit {
     this.learner.getTopThreeDoublesStats();
     this.learner.getTopThreeTriplesStats();
     let uni = this.learner.uniqueDegrees();
-    console.log(uni);
+    //console.log(uni);
     if(uni) {
       console.log("INTEGRATED!!!!!!!!");
       this.melody = [];
@@ -259,7 +282,7 @@ export class ConfigComponent implements OnInit {
     }
 
     console.log(this.melody);
-
+    
     this.learnerAssessor = [[],[],[]];
   }
 
@@ -742,6 +765,7 @@ export class ConfigComponent implements OnInit {
       beat = new Beat();
       beat.notes = this.makeBeatNotes();
       beat.duration = this.durations[speed];
+      //this.duration = this.durations[speed];
       this.melody[i] = beat;
       i++;
     }
@@ -840,6 +864,8 @@ export class ConfigComponent implements OnInit {
     let melody = this.melody;
     console.log(this.melody);
     this.timeInterval = this.melody[this.index].duration;
+
+    await this.playTheScale();
 
     for(i = 0; i < this.melody.length; i++){
       this.chordDelegator(melody[i]);
