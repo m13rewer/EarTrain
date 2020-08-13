@@ -28,10 +28,10 @@ export class LearnerComponent implements OnInit {
   private twoNotQuite: string;
   private threeNotQuite: string;
   private fourNotQuite: string;
-  private lineOne: string;
-  private lineTwo: string;
-  private lineThree: string;
-  private lineFour: string;
+  public lineOne: string;
+  public lineTwo: string;
+  public lineThree: string;
+  public lineFour: string;
   private stringGridCorrect: string[];
   private stringGridNotQuite: string[];
 
