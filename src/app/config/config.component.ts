@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Renderer2, RendererFactory2, ElementRef, ViewChild, ViewChildren, Injectable } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2, RendererFactory2, ElementRef, ViewChild, ViewChildren, Injectable, TemplateRef } from '@angular/core';
 import { Note } from '../shared/note';
 import { LinkedList, Node } from '../shared/linked-list';
 import { Beat } from '../shared/beat';
@@ -12,7 +12,7 @@ import { StatStore } from '../shared/stat-store';
 @Component({
   selector: 'app-config',
   templateUrl: './config.component.html',
-  styleUrls: ['./config.component.css']
+  styleUrls: ['./config.component.scss']
 })
 
 
@@ -60,8 +60,11 @@ export class ConfigComponent implements OnInit {
   public keyArray: string[];
   public solfege: string[];
   public scalePlay: string[];
+  public assessed: boolean;
+  public speed: number;
+  public toggleResponse: boolean;
 
-  constructor(private renderer: Renderer2, private shortCuts: ShortCutsPipe, private lowerCase: LowerCasePipe) { }
+  constructor(private renderer: Renderer2, private shortCuts: ShortCutsPipe, private lowerCase: LowerCasePipe, private emitterService: LearnerService) { }
   
   @ViewChild('fields') private el: ElementRef;
   @HostListener('window:keydown', ['$event'])
@@ -78,6 +81,7 @@ export class ConfigComponent implements OnInit {
 
     if(event.key === " " && this.melody){
       this.play();
+      return;
     }
 
     switch(this.shortCuts.transform(event.key)){
@@ -112,7 +116,6 @@ export class ConfigComponent implements OnInit {
     this.scale = '';
     this.buttonMode = 'Relative';
     this.map = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
-    //this.keyRoot = this.map[Math.floor(Math.random() * this.map.length)];
     this.keyScale = 'Major';
     this.inputValues = '';
     this.values = '';
@@ -120,27 +123,192 @@ export class ConfigComponent implements OnInit {
     this.numberValues = '';
     this.numberAnswer = '';
     this.letterAnswer = '';
-    //this.melodyMatrix = [];
     this.addNotes = true;
-    //this.learner.ngOnInit();// = new LearnerComponent(this.rendererFactory).ngOnInit();
     this.learnerAssessor = [[],[],[]];
     this.learner = new LearnerService();
     this.StatStore = new StatStore(new Map<string, number>());
     this.learnerOn = false;
-    this.solfege = ['do', 're', 'me', 'fa', 'so', 'la', 'ti'];
-
-    this.setSeconds();
+    this.solfege = ['do', 're', 'mi', 'fa', 'so', 'la', 'ti'];
+    this.assessed = true;
+    this.speed = 0;
+    this.toggleResponse = true;
+    //this.setSeconds();
     this.setRoots();
     this.setScales();
     this.setNotes();
     this.setOctaves();   
+  }
+
+  triggerLearnerFunction(assessed: boolean){
+    this.emitterService.animatedAssessment(assessed);
+    //this.toggleResponse = true;
+    console.log(this.toggleResponse);
+  }
+
+  @ViewChild('speed') private ul: ElementRef;
+
+  setSeconds(speed: any) {
+    console.log(speed.value);
+
+    if(+speed.value === 50) {
+      console.log("display");
+      this.displayOptions();
+      return;
+    }
+    if(+speed.value === 100) {
+      console.log("retractIt");
+      this.retractOptions();
+      return;
+    }
+
+    this.speed = +speed.value;
+    console.log(this.speed);
+    this.retractOptions();
+  }
+
+  async displayOptions(){
+    console.log("displayOptions()");
+    const milliseconds = 50;
+    const li = this.renderer.createElement('li');
+    this.renderer.addClass(
+      li, 'li-one'
+    );
+    let lvl = this.renderer.createText('1');
+    this.renderer.appendChild(li, lvl);
+    this.renderer.setProperty(li, "value", "0");
+    this.renderer.appendChild(this.ul.nativeElement, li);
+
+    await this.sleeper(milliseconds);
+    
+    const li2 = this.renderer.createElement('li');
+    this.renderer.setProperty(li2, "value", "1");
+    this.renderer.addClass(
+      li2, 'li-two'
+    );
+
+    lvl = this.renderer.createText('2');
+    this.renderer.appendChild(li2, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li2);
+
+    await this.sleeper(milliseconds);
+    
+    const li3 = this.renderer.createElement('li');
+    this.renderer.setProperty(li3, "value", "2");
+    this.renderer.addClass(
+      li3, 'li-two'
+    );
+
+    lvl = this.renderer.createText('3');
+    this.renderer.appendChild(li3, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li3);
+
+    await this.sleeper(milliseconds);
+    
+    const li4 = this.renderer.createElement('li');
+    this.renderer.setProperty(li4, "value", "3");
+    this.renderer.addClass(
+      li4, 'li-two'
+    );
+
+    lvl = this.renderer.createText('4');
+    this.renderer.appendChild(li4, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li4);
+
+    await this.sleeper(milliseconds);
+    
+    const li5 = this.renderer.createElement('li');
+    this.renderer.setProperty(li5, "value", "4");
+    this.renderer.addClass(
+      li5, 'li-two'
+    );
+
+    lvl = this.renderer.createText('5');
+    this.renderer.appendChild(li5, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li5);
+
+    await this.sleeper(milliseconds);
+    
+    const li6 = this.renderer.createElement('li');
+    this.renderer.setProperty(li6, "value", "5");
+    this.renderer.addClass(
+      li6, 'li-two'
+    );
+
+    lvl = this.renderer.createText('6');
+    this.renderer.appendChild(li6, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li6);
+
+    await this.sleeper(milliseconds);
+    
+    const li7 = this.renderer.createElement('li');
+    this.renderer.setProperty(li7, "value", "6");
+    this.renderer.addClass(
+      li7, 'li-two'
+    );
+
+    lvl = this.renderer.createText('7');
+    this.renderer.appendChild(li7, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li7);
+
+    await this.sleeper(milliseconds);
+    
+    const li8 = this.renderer.createElement('li');
+    this.renderer.setProperty(li8, "value", "7");
+    this.renderer.addClass(
+      li8, 'li-two'
+    );
+
+    lvl = this.renderer.createText('8');
+    this.renderer.appendChild(li8, lvl);
+    this.renderer.appendChild(this.ul.nativeElement, li8);
+    
+    this.renderer.setProperty(this.ul.nativeElement.children[0], "value", 100);
+  }
+
+  async retractOptions(){
+    console.log("retractOptions()");
+
+    let ul = this.ul.nativeElement.children;
+    console.log(this.speed);
+    
+    while(ul.length > 1){
+      this.renderer.addClass(
+        ul[ul.length-1], 'li-retract-'+(ul.length-1)
+      );
+
+      await this.sleeper(50);
+      this.renderer.removeChild(this.ul.nativeElement, ul[ul.length-1]);
+      
+    }
+
+    this.renderer.addClass(ul[0], 'number-fade');
+
+    this.renderer.setProperty(this.ul.nativeElement.children[0], "value", 50);
 
   }
 
-  setSeconds() {
-    for(let i = 0; i < 7; i++){
-      this.seconds.push(i);
-    }
+  @ViewChild('update') private ele: ElementRef;
+
+  clickerPicker(elem: any) {
+    let splitClass = elem.classList[0].split("-");
+    console.log(splitClass);
+    splitClass[0] === "clicked" ? this.unclicked(elem, splitClass[1]) : this.clicked(elem);
+    
+    //delegate
+  }
+  clicked(elem: any){
+    console.log("clicked()");
+    //this.ele = elem;
+    //this.ele.nativeElement.class;
+    let elClass = ""+elem.classList[0];
+    this.renderer.removeClass(elem, elem.classList[0]);
+    this.renderer.addClass(elem, 'clicked-'+elClass);
+    
+    console.log(elem.classList[0]);
+  }
+  unclicked(elem: any, className: string) {
+    this.renderer.removeClass(elem, elem.classList[0]);
+    this.renderer.addClass(elem, className);
   }
 
   setScales() {
@@ -183,25 +351,20 @@ export class ConfigComponent implements OnInit {
   }
 
   changeSolfege(stat: any){
-    //stat.value;
     this.keyScale = stat.value;
     if(this.keyScale === "Major") this.solfege = ['do', 're', 'mi', 'fa', 'so', 'la', 'ti'];
     if(this.keyScale === "Minor") this.solfege = ['do', 're', 'me', 'fa', 'so', 'le', 'te'];
     if(this.keyScale === "Blues") this.solfege = ['do', 're', 'ri', 'mi', 'so', 'la'];
     
-    //this.keyScale = this.scale;//this.solfege.toString().replace(/,/gi, '');
-    
-    console.log("it works "+ this.keyScale);
   }
 
   async playTheScale(){
-
+    if(this.buttonMode === "Perfect") return;
     this.scalePlay = [];
     this.keyArray.forEach(element => {
       this.scalePlay.push(element+5);
     });
 
-    //this.scalePlay
     for(let i = 0; i < this.scalePlay.length; i++){
       await this.sleeper(100);
       this.loadHandler(this.scalePlay[i]);
@@ -217,11 +380,8 @@ export class ConfigComponent implements OnInit {
     }
 
     let pianoSounds = [Sounds.pianoPitchSprite];
-    //console.log(Sounds.pianoPitchSprite);
     let audioPath = "./assets/piano-pitch-files/";
     let sounds = [Sounds.pitchSprite];
-    //console.log(Sounds.pitchSprite);
-
       
     createjs.Sound.alternateExtensions = ["mp3"];
     createjs.Sound.on("fileload", this.loadHandler);
@@ -262,7 +422,7 @@ export class ConfigComponent implements OnInit {
     this.learner.getTopThreeDoublesStats();
     this.learner.getTopThreeTriplesStats();
     let uni = this.learner.uniqueDegrees();
-    //console.log(uni);
+  
     if(uni) {
       console.log("INTEGRATED!!!!!!!!");
       this.melody = [];
@@ -288,7 +448,7 @@ export class ConfigComponent implements OnInit {
 
   reset(){
     console.log("reset()");
-
+    
     let tempSpans = this.el.nativeElement.children;
     if(this.melody.length > 0 && this.learnerOn === true) this.activateLearner();
 
@@ -301,11 +461,12 @@ export class ConfigComponent implements OnInit {
     this.countDown = 0;
     this.melody = [];
     this.notesLinkedList = new LinkedList<string>();
+    this.assessed = true;
     this.setNotes();
     
   }
 
-  checkAsYouGo(response: string) { // with type info
+  checkAsYouGo(response: string) {
     console.log("checkAsYouGo()");
     if(this.melody.length === 0 || !this.melody){
       return;
@@ -323,15 +484,12 @@ export class ConfigComponent implements OnInit {
     response = inputVal;
 
     if(response.match(regex)){
-      //console.log(response.match(regex));
       answerObject = this.checkAsYouGoNumber(letterAnswer, numberAnswer, response);
       valNumber = answerObject.assessment;
       (valNumber === undefined ? this.numberValues = 'Make a new melody': this.numberValues = valNumber);
       
     }else{
-      //console.log("regex not rec "+response);
       answerObject = this.checkAsYouGoLetter(letterAnswer, numberAnswer, response);
-      
       val = answerObject.assessment;
       (val === undefined ? this.values = 'Make a new melody': this.values = val);
       
@@ -339,19 +497,14 @@ export class ConfigComponent implements OnInit {
 
     this.numberAnswer = answerObject.adjustedAnswerDigit.join("");
     this.letterAnswer = answerObject.adjustedAnswerLetter.join("");
-    //console.log(valNumber);
     (val === undefined || val === undefined? this.inputValues = 'Make a new melody': this.inputValues += inputVal);
     
-    //console.log('adjustedString: '+this.letterAnswer+' '+this.numberAnswer);
-
     if(this.countDown === this.rows-1){
       this.countDown = 0;
       this.count++;
     }else{
       this.countDown++;
     }
-    
-    //response.value = '';
   }
 
   updateAnswerString(answerArrayLetter: string[], answerArrayDigit: string[]){
@@ -372,10 +525,6 @@ export class ConfigComponent implements OnInit {
     let reversedAnswerLetter = AnswerObj['reversedAnswerLetter'];
     let reversedAnswerDigit = AnswerObj['reversedAnswerDigit'];
     let reveal = '';
-    //console.log('checkAsYouGoLetter()');
-    
-    //console.log('answer: ');
-    //console.log(answerArrayLetter);
     
     if(letter === response){
       this.learnerAssessor[this.countDown][this.count] = true;
@@ -384,8 +533,9 @@ export class ConfigComponent implements OnInit {
       
     }else if(letter === undefined){
       reveal = letter;
-      //this.learnerAssessor[this.countDown][this.count] = true;
+      
     }else{
+      this.assessed = false;
       this.learnerAssessor[this.countDown][this.count] = false;
       this.melody[this.count].notes[this.countDown].stat = false;
       this.updateResponseFields(`${letter}`, 'red', answerArrayLetter, answerArrayDigit);
@@ -406,11 +556,6 @@ export class ConfigComponent implements OnInit {
     let reversedAnswerDigit = AnswerObj['reversedAnswerDigit'];
     let reveal = '';
     
-   
-    // console.log('answer: ');
-    // console.log(answerArrayDigit);
-    // console.log(this.countDown, this.count);
-    
     if(digit === response){
       this.learnerAssessor[this.countDown][this.count] = true;
       this.melody[this.count].notes[this.countDown].stat = true;
@@ -419,14 +564,13 @@ export class ConfigComponent implements OnInit {
 
     }else if(digit === undefined){
       reveal = digit;
-      //this.learnerAssessor[this.countDown][this.count] = true;
     }else{
+      this.assessed = false;
       this.learnerAssessor[this.countDown][this.count] = false;
       this.melody[this.count].notes[this.countDown].stat = false;
       this.updateResponseFields(`${digit}`, 'red', answerArrayLetter, answerArrayDigit);
 
     }
-    //console.log(this.learnerAssessor);
     
     return {'assessment': reveal, 'adjustedAnswerLetter': reversedAnswerLetter.reverse(), 'adjustedAnswerDigit': reversedAnswerDigit.reverse()};
 
@@ -434,10 +578,10 @@ export class ConfigComponent implements OnInit {
 
   updateResponseFields(response: string, style: string, arrLetter: string[], arrNumber: string[]){
     console.log("updateResponseFields()");
-    //console.log(this.el.nativeElement.children);
+    
     let tempSpans = this.el.nativeElement.children;
     let i = 0;
-    
+
     for(let e = 0; e < tempSpans.length; e++){
       if(e === this.melody.length || e === this.melody.length*2){
         i++;
@@ -448,7 +592,6 @@ export class ConfigComponent implements OnInit {
     let span = this.renderer.createElement('span');
     let text = this.renderer.createText(response);
     this.renderer.addClass(span, 'temp' + this.countDown);
-    //console.log("Coundown:" + this.countDown);
     this.renderer.setStyle(
       span, 
       'color', style);
@@ -468,8 +611,6 @@ export class ConfigComponent implements OnInit {
         span, 
         'color', style);
       this.renderer.appendChild(span, text);
-      //console.log("Count: "+this.count);
-      //console.log("here it is again");
       this.renderer.insertBefore(this.el.nativeElement, span, this.spanMatrix[++this.countDown][this.count]);
 
       this.renderer.removeChild(this.el.nativeElement, this.spanMatrix[this.countDown][this.count]);
@@ -492,8 +633,6 @@ export class ConfigComponent implements OnInit {
         span, 
         'color', style);
       this.renderer.appendChild(span, text);
-      //console.log("Count: "+this.count);
-      //console.log("here it is again");
       this.renderer.insertBefore(this.el.nativeElement, span, this.spanMatrix[++this.countDown][this.count]);
 
       this.renderer.removeChild(this.el.nativeElement, this.spanMatrix[this.countDown][this.count]);
@@ -505,8 +644,9 @@ export class ConfigComponent implements OnInit {
       
     }
     
-    //console.log("need to reset "+this.countTotal);
     if(this.countTotal === this.melody.length*this.rows){
+      this.toggleResponse = false;
+      this.triggerLearnerFunction(this.assessed);
       this.reset();
       return;
     }
@@ -517,8 +657,8 @@ export class ConfigComponent implements OnInit {
     let letterAnswer = this.getAnswer(rowsToAdd);
     let numberAnswer = "";
     console.log("getNumberAnswer()");
-    //console.log(this.root, this.notesLinkedList.size());
-    let mapArray = this.mapToScaleDegree(/*this.keyRoot*/this.root, this.notesLinkedList.size());
+    
+    let mapArray = this.mapToScaleDegree(this.root, this.notesLinkedList.size());
 
     for(let i = 0; i < letterAnswer.length; i++){
       if(letterAnswer[i] === '*'){
@@ -528,8 +668,6 @@ export class ConfigComponent implements OnInit {
       numberAnswer = numberAnswer + (mapArray.indexOf(letterAnswer[i])+1); 
     }
 
-    //console.log("getNumberAnswer()");
-    //console.log(numberAnswer);
     this.numberAnswer = numberAnswer;
     return numberAnswer;
   }
@@ -560,7 +698,6 @@ export class ConfigComponent implements OnInit {
       }
     }
 
-    //console.log(answer);
     this.letterAnswer = answer;
     return answer;
   }
@@ -576,11 +713,9 @@ export class ConfigComponent implements OnInit {
     return keyArray;
   }
 
-  getScalePattern(){
-    /*build the rest*/
+  getScalePattern(){ 
     console.log("getScalePattern()");
     
-    //this.keyScale;
     switch(this.keyScale){
       case 'Major':
         return [2, 2, 1, 2, 2, 2];
@@ -602,9 +737,8 @@ export class ConfigComponent implements OnInit {
   keys(root: string, scale: string){
     console.log("keys()");
     let cMajor = [1, 3, 6, 8, 10]; //these are the indexes of the notes not in the key of c major
-    let cBlues = [1, 5, 6, 8, 10, 11];//TODO
-    let cMinor = [];//TODO
-    /*do the same for blues, minor, etc.*/
+    let cBlues = [1, 5, 6, 8, 10, 11];
+    let cMinor = [1, 4, 6, 9, 11];
     let notes = {
       'cMajor': cMajor,
       'c#Major': this.getKeyArray(cMajor, 1),
@@ -644,28 +778,29 @@ export class ConfigComponent implements OnInit {
       'bBlues': this.getKeyArray(cBlues, 11),
 
     }
-    
+    console.log(root, scale);
     return notes[root+scale];
   }
 
   makeKey(root: string, scale: string){
+    console.log("makeKey()");
     let notes = this.map;
     let scales = ['Major', 'Minor', 'Blues'];
     if(root === 'Random') root = notes[Math.floor(Math.random() * notes.length)];
     if(scale === 'Random') scale = notes[Math.floor(Math.random() * scales.length)];
     this.root = root;
+    console.log(this.root);
     let notesToDelete = this.keys(root, scale);
 
     for(let i = 0; i < notes.length; i++){
       this.notesLinkedList.delete(notes[notesToDelete[i]]);
     }
-    console.log("makeKey()");
     
-    //console.log(this.notesLinkedList);
+    
   }
 
   mapToScaleDegree(root: string, scaleLength: number){
-    const pattern = this.getScalePattern(); //make a getPattern function
+    const pattern = this.getScalePattern();
     const notes = this.map;
     const map = {
       'c': 0,
@@ -693,11 +828,8 @@ export class ConfigComponent implements OnInit {
       i++;
     }
     console.log("mapToScaleDegree()");
-    //console.log(newNotes);
-    //this.learner = new LearnerComponent(this.rendererFactory);
-    console.log(newNotes);
     this.keyArray = newNotes;
-    this.learner.setKeyArray(this.keyArray); //set key array for learner
+    this.learner.setKeyArray(this.keyArray);
     return newNotes; 
   }
 
@@ -707,7 +839,6 @@ export class ConfigComponent implements OnInit {
     console.log("updateNotes()");
     if(stat.value === 'true') {
       this.notesLinkedList.delete(note);
-      //this.mapToScaleDegree(note, this.keyScale);
       stat.value = false;
     } else {
       this.notesLinkedList.append(note);
@@ -715,7 +846,6 @@ export class ConfigComponent implements OnInit {
     }
 
     this.keyArray = this.notesLinkedList.toArray();
-
     this.learner.setKeyArray(this.keyArray);
   }
 
@@ -732,19 +862,21 @@ export class ConfigComponent implements OnInit {
     this.learner.setOctaves(this.octavesLinkedList.toArray());
   }
 
-  melodyDelegator(speed: number, root: string, scale: string){
+  melodyDelegator(root: string, scale: string){
     console.log("melodyDelegator()");
     
     if(this.melody.length > 0 && this.learnerOn === true && this.learner.hasUniqueness()) return;
     if(this.buttonMode === 'Relative'){
       console.log("relative");
+      console.log(this.speed);
       this.reset();
       this.makeKey(root, scale);
-      this.makeMelody(speed);
+      this.makeMelody(this.speed);
+      
       this.getNumberAnswer(0);
     }else{
       this.rows = 1;
-      this.makeMelody(speed);
+      this.makeMelody(this.speed);
       this.getAnswer(0);
     }
   }
@@ -765,7 +897,6 @@ export class ConfigComponent implements OnInit {
       beat = new Beat();
       beat.notes = this.makeBeatNotes();
       beat.duration = this.durations[speed];
-      //this.duration = this.durations[speed];
       this.melody[i] = beat;
       i++;
     }
@@ -792,14 +923,9 @@ export class ConfigComponent implements OnInit {
 
   addToResponseFields(numberRows: number){
     console.log("addToResponseFields()");
-    //console.log(numberRows);
     const parent = this.el.nativeElement;
   
     for(let e = 1; e < numberRows+1; e++){
-
-      // const br = this.renderer.createElement('br');
-      // this.renderer.appendChild(parent, br);
-
       for(let i = 0; i < this.melody.length; i++){
         
         const span = this.renderer.createElement('span');
@@ -817,7 +943,7 @@ export class ConfigComponent implements OnInit {
 
   undefinedToAsterisk(numberOfRows: number){
     console.log("undefinedToAsterisk()");
-    //this.melodyCopy = this.melody;
+
     for(let i = 0; i < this.melody.length; i++){
       for(let e = 0; e <= numberOfRows; e++){
         if(this.melody[i].notes[e] === undefined){
@@ -832,7 +958,6 @@ export class ConfigComponent implements OnInit {
 
       }
     }
-    //console.log(this.melody);
   }
 
   makeBeatNotes(){
@@ -847,7 +972,6 @@ export class ConfigComponent implements OnInit {
       note = new Note();
       note.pitch = notesList[Math.floor(Math.random() * notesList.length)];
       note.octave = this.getOctave();
-      /* need to add more properties of a note */
       notes[i] = note;
       i++;
     }
@@ -856,8 +980,9 @@ export class ConfigComponent implements OnInit {
   }
 
   async play(){
-    //console.log(this.melody);
     console.log("play()");
+
+    if(!this.melody.length) return;
 
     this.index = 0;
     let i: number;
@@ -896,7 +1021,6 @@ export class ConfigComponent implements OnInit {
         this.triadloadHandler(pitch[0]+octave[0], pitch[1]+octave[1], pitch[2]+octave[2]);
         break;
       default:
-        //console.log("heyo");
         pitch[0] = melody.notes[0].pitch;
         octave[0] = melody.notes[0].octave;
         this.loadHandler(pitch[0]+octave[0]);
@@ -926,7 +1050,6 @@ export class ConfigComponent implements OnInit {
     const notesList = this.notesLinkedList.toArray();
     let beatToChange: number;
     let note: Note;
-    //let secondNote: Note;
     let cap = this.melody.length;
     let indexesToChange = Math.floor(Math.random() * cap);
     for(let i = 0; i < indexesToChange; i++){
@@ -945,7 +1068,6 @@ export class ConfigComponent implements OnInit {
     this.undefinedToAsterisk(2);
     this.rows = 3;
     this.addNotes = false;
-    //console.log(this.melody);
     this.buttonMode === 'Relative' ? this.getNumberAnswer(2) : this.getAnswer(2);
   }
 
@@ -980,8 +1102,6 @@ export class ConfigComponent implements OnInit {
   mixRhythm(){
     console.log("mixRhythm()");
 
-    //this.melody;
-    //this.durations;
     for(let i = 0; i < this.melody.length; i++){
       this.melody[i].duration = this.durations[Math.floor(Math.random() * this.durations.length)];
     }

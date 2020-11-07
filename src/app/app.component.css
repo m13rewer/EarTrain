@@ -2,7 +2,7 @@ app-config {
     display: block;
     margin-right: auto;
     margin-left: auto;
-    width: 500px;
+    width: max-content;
 }
 
 h1 {

@@ -3,18 +3,19 @@ import { StatStore } from '../shared/stat-store';
 import { Beat } from '../shared/beat';
 import { Note } from '../shared/note';
 import { mapChildrenIntoArray } from '@angular/router/src/url_tree';
+import { LearnerService } from '../shared/learner.service';
 
 
 @Component({
   selector: 'app-learner',
   templateUrl: './learner.component.html',
-  styleUrls: ['./learner.component.css']
+  styleUrls: ['./learner.component.scss']
 })
 export class LearnerComponent implements OnInit {
 
   @ViewChild('animated') private el: ElementRef;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private emitterService: LearnerService) { }
 
   private animation: string;
   private table: string;
@@ -54,27 +55,34 @@ export class LearnerComponent implements OnInit {
     this.fourCorrect = 
 ` **   **   * * * * ***  **  * `;
 
+//     this.oneNotQuite=
+// `*  *  **  ***     **  *  * * *** *** 
+// ** * *   *  *     *  * *  * *   *   **
+// * ** *   *  *     **** **  *   *   *  
+// *  *  **    *      ** ***  *   *   ***`;
+this.oneNotQuite=
+`*  *  **    ***   *** 
+** * *   * *   *  **
+* ** *   * ***   *  
+*  *  **  *    ***`;
     this.oneNotQuite=
-`*  *  **  ***     **  *  * * *** *** 
-** * *   *  *     *  * *  * *   *   **
-* ** *   *  *     **** **  *   *   *  
-*  *  **    *      ** ***  *   *   ***`;
+`*  *  **    ***   ***`;
 
-    this.oneNotQuite = 
-` *  *  **  ***     **  *  * * *** *** `;
+//     this.oneNotQuite = 
+// ` *  *  **  ***     **  *  * * *** *** `;
+this.twoNotQuite=
+`** * *   * *   *  **`;
 
-
-    this.twoNotQuite = 
-`** * *   *  *     *  * *  * *   *   **`;
-
-    this.threeNotQuite = 
-`* ** *   *  *     **** **  *   *   *  `;
-
-    this.fourNotQuite = 
-`*  *  **    *      ** ***  *   *   ***`;
-
-    
-
+//     this.twoNotQuite = 
+// `** * *   *  *     *  * *  * *   *   **`;
+this.threeNotQuite =
+`* ** *   * ***   * `;
+//     this.threeNotQuite = 
+// `* ** *   *  *     **** **  *   *   *  `;
+this.fourNotQuite=
+`*  *  **  *       ***`
+//     this.fourNotQuite = 
+// `*  *  **    *      ** ***  *   *   ***`;
 
     this.stringGridCorrect = [];
     this.stringGridCorrect[0] = this.oneCorrect;
@@ -92,12 +100,30 @@ export class LearnerComponent implements OnInit {
     this.lineTwo = ``;
     this.lineThree = ``;
     this.lineFour = ``;
-    
+
+    if (this.emitterService.subscription == undefined) {    
+      this.emitterService.subscription = this.emitterService.    
+      emitter.subscribe((assessed: boolean) => {    
+        this.assessment(assessed);    
+      });    
+    }    
+  }
+
+  assessment(assessed: boolean){
+    assessed ? this.correctAppear() : this.notQuiteAppear();
+  }
+
+  setStyle(color: string){
+    this.renderer.removeStyle(this.el.nativeElement, 'color');
+    this.renderer.setStyle(
+      this.el.nativeElement, 
+      'color', color);
   }
 
   async notQuiteAppear(){
-
+    this.setStyle("red");
     this.lineOne = this.oneNotQuite.substring(0, Math.ceil(this.oneNotQuite.length/2)-1)+'\n\n\n';
+
     let i = () => {
       let v = " ";
       for(let i = 0; i < (this.fourNotQuite.length/2)-1; i++){
@@ -107,9 +133,10 @@ export class LearnerComponent implements OnInit {
     };
 
     this.lineFour = i();
-    await this.sleeper(50);
+    await this.sleeper(100);
 
     this.lineOne = this.oneNotQuite.substring(0, Math.ceil(this.oneNotQuite.length/2)-1);
+
     let e = () => {
       let v = " ";
       for(let i = 0; i < (this.threeNotQuite.length/2)-1; i++){
@@ -121,34 +148,26 @@ export class LearnerComponent implements OnInit {
 
     this.lineTwo = this.twoNotQuite.substring(0, Math.ceil(this.twoNotQuite.length/2)-1);
     this.lineThree = e();
-    await this.sleeper(50);
+    await this.sleeper(100);
 
-    //this.lineOne += this.oneNotQuite.substring(Math.ceil(this.oneNotQuite.length/2), this.oneNotQuite.length);
-    //this.lineFour = 
-    // this.lineFour = this.fourNotQuite.substring(0, Math.ceil(this.fourNotQuite.length/2)) 
-    // + this.lineFour.substring(Math.ceil(this.oneNotQuite.length/2), this.oneNotQuite.length);;
     this.lineTwo = this.twoNotQuite.substring(0, Math.ceil(this.twoNotQuite.length/2)-1) + 
     this.twoNotQuite.substring(Math.ceil(this.twoNotQuite.length/2)-1, this.twoNotQuite.length);
     this.lineThree = this.threeNotQuite.substring(0, Math.ceil(this.threeNotQuite.length/2)-1) + 
     this.threeNotQuite.substring(Math.ceil(this.threeNotQuite.length/2)-1, this.threeNotQuite.length);
-    await this.sleeper(50);
+    await this.sleeper(100);
 
-    //this.linethree = this.threeNotQuite.substring(Math.ceil(this.threeNotQuite.length/2));
-    // this.lineTwo += this.twoNotQuite.substring(Math.ceil(this.twoNotQuite.length/2), this.twoNotQuite.length);
-    // this.lineThree = this.threeNotQuite.substring(0, Math.ceil(this.threeNotQuite.length/2)) + 
-    //this.threeNotQuite.substring(Math.ceil(this.threeNotQuite.length/2), this.threeNotQuite.length);
     this.lineOne = this.oneNotQuite.substring(0, Math.ceil(this.oneNotQuite.length/2)-1) + 
     this.oneNotQuite.substring(Math.ceil(this.oneNotQuite.length/2)-1, this.oneNotQuite.length);
 
     this.lineFour = this.fourNotQuite.substring(0, Math.ceil(this.fourNotQuite.length/2)-1) + 
     this.fourNotQuite.substring(Math.ceil(this.fourNotQuite.length/2)-1, this.fourNotQuite.length);
 
-    
     await this.sleeper(500);
     this.deleteAsterisks(this.oneNotQuite);
   }
 
   async correctAppear(){
+    this.setStyle("green");
 
     for(let i = 0; i < this.oneCorrect.length ; i++){
 
@@ -194,7 +213,7 @@ export class LearnerComponent implements OnInit {
     for(let i = 0; i < this.oneCorrect.length ; i++){
 
       rowOne[rows[0][randomIndex = Math.floor(Math.random() * rows[0].length)]] = " ";
-      rows[0] = rows[0].filter(element => element !== rows[0][randomIndex]);//rows[0].filter(element => element !== " ");
+      rows[0] = rows[0].filter(element => element !== rows[0][randomIndex]);
       console.log(rows[0]);
       this.lineOne = rowOne.toString().replace(regex, "");
 
@@ -218,10 +237,6 @@ export class LearnerComponent implements OnInit {
     }
 
     this.lineOne = this.lineTwo = this.lineThree = this.lineFour = "";
-  }
-
-  stop(){
-    clearInterval(this.timer);
   }
 
   sleeper(milliseconds: number){

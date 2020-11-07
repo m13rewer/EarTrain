@@ -1,0 +1,331 @@
+form > input {
+    /* width: 45%; */
+    /* margin-right: 2%; */
+    /* font-size: 20px; */
+    /* padding: 1%; */
+    border-radius: 10px;
+    float: left;
+}
+
+form {
+    float: left;
+    
+}
+
+select {
+    border-radius: 10px;
+}
+
+button {
+    // background-color: white;
+    border-radius: 12px;
+    padding-left: 2%;
+    padding-right: 2%;
+    min-width: 55px;
+    font-weight: 600;
+    // border: 3px solid;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    color: white;
+    background-color: darkslategrey;
+    border: solid 3px darkslategrey;
+}
+
+button:hover {
+    color: white;
+    background-color: darken(darkslategrey, 10%);
+    border: solid 3px darken(darkslategrey, 10%);
+    
+}
+
+button:focus {
+    outline: 0;
+}
+
+button:active {
+    color: grey;
+    background-color: inherit;
+}
+
+ul {
+    position: absolute;
+    z-index: 1;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+    margin-left: 175px;
+}
+
+ul > li {
+    border-radius: 20px;
+    list-style: none;
+    border: solid 2px darkslategrey;
+    text-align: center;
+    z-index: 1;
+    opacity: 1;
+    background-color: white;
+    margin-bottom: 2px;
+    font-size: 14px;
+    padding-left: 2px;
+    padding-right: 3px;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+ul > li:hover {
+    color: rgb(38, 219, 219);
+    border-color: rgb(38, 219, 219);
+}
+
+li {
+    animation: translate .25s;
+}
+
+.temp0 {
+    
+}
+
+#input {
+    margin: 0;
+}
+
+$submit-color: #297e52;
+.submit {
+    color: white;
+    background-color: $submit-color;
+    border: solid 3px $submit-color;
+    
+}
+
+.submit:hover {
+    color: white;
+    background-color: darken($submit-color, 10%);
+    border: solid 3px darken($submit-color, 10%);
+    
+}
+
+.clicked-submit {
+    border-color: $submit-color;
+    color: $submit-color;
+    background-color: white;
+}
+
+.clicked-submit:hover {
+    border-color: darken($submit-color, 10%);
+    color: darken($submit-color, 10%);
+    background-color: white;
+}
+
+$update-color: #16452d;
+.update {
+    color: white;
+    background-color: $update-color;
+    border: solid 3px $update-color;
+    
+}
+
+.update:hover {
+    color: white;
+    background-color: darken($update-color, 10%);
+    border: solid 3px darken($update-color, 10%);
+    
+}
+
+.clicked-update {
+    border-color: $update-color;
+    color: $update-color;
+    background-color: white;
+}
+
+.clicked-update:hover {
+    border-color: darken($update-color, 10%);
+    color: darken($update-color, 10%);
+    background-color: white;
+}
+
+$melody-color: #70d09f;
+#melody button {
+    color: white;
+    background-color: $melody-color;
+    border: solid 3px $melody-color;
+}
+
+#melody button:hover {
+    color: white;
+    background-color: darken($melody-color, 10%);
+    border: solid 3px darken($melody-color, 10%);
+}
+
+
+$octaves-color: #3cb878;
+#octaves button {
+    color: white;
+    background-color: $octaves-color;
+    border: solid 3px $octaves-color;
+}
+
+#octaves button:hover {
+    color: white;
+    background-color: darken($octaves-color, 10%);
+    border: solid 3px darken($octaves-color, 10%);
+}
+
+
+@for $i from 1 through 8 {
+    .li-retract-#{$i}{
+        @debug $i;
+        animation: retract-#{$i} .25s;
+
+    }
+  }
+
+  @for $i from 1 through 8 {
+      @keyframes retract-#{$i} {
+          100% {
+              transform: translateY(-1*$i*24px);
+          }
+      }
+  }
+
+@keyframes number-fade {
+
+    100% {
+        opacity: 0;
+    }
+    
+}
+
+  @keyframes translate {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+  
+    50% {
+        opacity: 1;
+    }
+
+  }
+
+#modes {
+    margin-top: 10px;
+}
+
+#app-config-body {
+    float: left;
+}
+#screen {
+    height: 200px;
+    width: 350px;
+    border: solid;
+    border-radius: 10px;
+    float: left;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+#screen-div {
+    float: left;
+}
+
+#response {
+    height: 50%;
+    width: inherit;
+    margin-top: 0;
+    text-align: center;
+    word-break: break-all;
+    word-wrap: break-word;
+    // border: solid;
+    // border-radius: 10px;
+}
+
+
+.update-first-half {
+    float: left;
+}
+
+.update-second-half {
+    float: left;
+    clear: left;
+}
+
+.submit-first-half {
+    float: left;
+    clear: left;
+}
+
+.submit-second-half {
+    float: left;
+    clear: left;
+}
+.clicked-submit-first-half {
+
+}
+
+#octaves, #melody {
+    clear: left;
+}
+
+#octaves-header {
+    clear: left;
+}
+
+#info {
+    margin-left: 11%;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+@font-face {
+    font-family: 'icomoon';
+    src:  url('../../assets/icons/fonts/icomoon.eot');
+    src:  url('../../assets/icons/fonts/icomoon.eot') format('embedded-opentype'),
+      url('../../assets/icons/fonts/icomoon.ttf') format('truetype'),
+      url('../../assets/icons/fonts/icomoon.woff') format('woff'),
+      url('../../assets/icons/fonts/icomoon.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  [class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-info:before {
+    content: "\ea0c";
+  }

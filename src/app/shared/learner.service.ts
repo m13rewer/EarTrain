@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Component, OnInit, Renderer2, RendererFactory2, ElementRef, ViewChild } from '@angular/core';
 import { StatStore } from './stat-store';
 import { Beat } from './beat';
 import { Note } from './note';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Injectable({
   providedIn: 'root'
@@ -31,65 +32,18 @@ export class LearnerService {
   private tableTemplate: string;
   private animated: string;
   private index: number;
+  public emitter = new EventEmitter();
+  public subscription: Subscription;
 
   constructor() {
-      //this.renderer = render;
-      //this.render = null;
-      //this.renderer = rendererFactory.createRenderer(this.el, null);
       this.map = new Map<string, number>();
       this.StatStore = new StatStore(this.map);
       this.uniqueDeg = [];
       this.isUnique = false;
-      this.animated = `f`;
-      
   }
 
-  ngOnInit() {
-    console.log("ngOnInit()");
-    
-    
-  }
-
-  makeTheTable(){
-    this.tableTemplate =
-`*****************
-*****************`;
-
-    this.addToText();
-    console.log(this.tableTemplate);
-  }
-
-  // const span = this.renderer.createElement('span');
-    //   this.renderer.addClass(span, 'temp0');
-    //   this.renderer.setStyle(
-    //     span, 
-    //     'color', 'grey');
-    //   const questionMark = this.renderer.createText('?');
-    //   this.renderer.appendChild(span, questionMark);
-
-    //   this.renderer.appendChild(this.el.nativeElement, span);
-
-  // animateTheTable(){
-  //   console.log("animateTheTable()");
-  //   this.animated = ``;
-  //   this.index = 0;
-  //   // for(let i = 0; i < this.tableTemplate.length; i++){
-  //   //   await this.sleeper(1000);
-  //   //   this.animated = this.animated + this.tableTemplate[i];
-  //   // }
-  //   // setInterval(() => this.animated = this.animated + this.tableTemplate.charAt(this.index++), 70);
-  //   // setTimeout(()=>console.log(this.animated), 3000);
-  //   //let timer;
-  //   //if(this.index === this.tableTemplate.length) clearInterval(timer);
-  //   //timer = setInterval(this.addToText, 50, timer);
-    
-    
-  // }
-
-  addToText(){
-    //let text = this.renderer.createText(this.tableTemplate);
-    //this.renderer.appendChild(this.el.nativeElement, text);
-    //if(this.index === this.tableTemplate.length) clearInterval(timer);
+  animatedAssessment(assessed: boolean){
+    this.emitter.emit(assessed);
   }
 
   sleeper(milliseconds: number){
@@ -202,7 +156,6 @@ export class LearnerService {
 
   scaleDegrees(){
     console.log("scaleDegrees()");
-    //this.melody
     let scaleDegrees: number[] = [];
     for(let i = 0; i < this.melody.length; i++){
       scaleDegrees.push(this.getScaleDegree(this.melody[i].notes[0].pitch)+1);
@@ -228,7 +181,6 @@ export class LearnerService {
       if(scaleDegree[lastIndex] < 0) oct[lastIndex] = -oct[lastIndex];
     }
 
-    //this.uniqueDegrees(scaleDegree);
     noteArr = this.octaveLimits(Math.max(...oct), Math.min(...oct), oct, noteArr);
     
     return noteArr;
@@ -519,11 +471,9 @@ export class LearnerService {
 
     let firstNoteIndex = this.getScaleDegree(firstNote.pitch);
     let secondNoteIndex = this.getScaleDegree(secondNote.pitch);
-    //console.log(firstNoteIndex, secondNoteIndex);
     let responseArr: string[];
     let octavesApart: number = Math.abs(firstNote.octave - secondNote.octave);
     let octaveThreshold: number = this.findCOrCSharp();
-    //console.log(octavesApart, octaveThreshold);
 
     if(((firstNoteIndex < octaveThreshold && secondNoteIndex >= octaveThreshold) && octavesApart === 1) || 
     
@@ -609,20 +559,7 @@ export class LearnerService {
 
   displayTopThree(){
     console.log("displayTopThree()");
-
-    //this.getTopThreeStats();
-    //console.log(this.topThreeKeys, this.topThreeValues);
-    this.keyArray;
-    // const span = this.renderer.createElement('span');
-    //   this.renderer.addClass(span, 'temp0');
-    //   this.renderer.setStyle(
-    //     span, 
-    //     'color', 'grey');
-    //   const questionMark = this.renderer.createText('?');
-    //   this.renderer.appendChild(span, questionMark);
-
-    //   this.renderer.appendChild(this.el.nativeElement, span);
-
+    //TODO
   }
 
   getSectors(substringEnd: number){
@@ -660,14 +597,12 @@ export class LearnerService {
         if(sectorsOfThree[element].includes(indexHolder[1].toString())) {
           sectors.push(sectorsOfThree[element]);
           sectorsOfThree[element] = "";
-          //sectorsOfThree = sectorsOfThree.filter(index => index != sectorsOfThree[element]);
           console.log(sectorsOfThree);
         }
 
-        //if(!sectorsOfThree) break;
         console.log("sectors: "+sectors, "sectorsOfThree: "+sectorsOfThree[element], "indexHolder: "+indexHolder);
       }
-      //sectorsOfThree.forEach(element => element.includes(indexHolder[1].toString() ))
+
       console.log(sectors);
       if(sectors[0]) {
         for(let element in sectors){
@@ -676,9 +611,6 @@ export class LearnerService {
       this.melody[sectors[element].substring(2,3)].notes[0]]);
         }
       }
-    //   console.log(this.melody[sectors[0].substring(0,1)].notes[0], 
-    //   this.melody[sectors[0].substring(1,2)].notes[0], 
-    //   this.melody[sectors[0].substring(2,3)].notes[0]);
     }
     console.log(notesArr3);
     return notesArr3;
@@ -700,28 +632,23 @@ export class LearnerService {
         if(sectorsOfTwo[element].includes(indexHolder[1].toString())){
           sectors.push(sectorsOfTwo[element]); 
           sectorsOfTwo[element] = "";
-          //sectorsOfTwo = sectorsOfTwo.filter(index => index != sectorsOfTwo[element]);
         }
         console.log(sectorsOfTwo);
         
         console.log("sectors: "+sectors, "sectorsOfTwo: "+sectorsOfTwo[element], "indexHolder: "+indexHolder);
       }
-      //sectorsOfThree.forEach(element => element.includes(indexHolder[1].toString() ))
+
       if(sectors[0]) {
         for(let element in sectors){
           notesArr2.push([this.melody[sectors[element].substring(0,1)].notes[0], 
       this.melody[sectors[element].substring(1,2)].notes[0]]);
         }
       }
-      
-      // console.log(this.melody[sectors[0].substring(0,1)].notes[0], 
-      // this.melody[sectors[0].substring(1,2)].notes[0], 
-      // this.melody[sectors[0].substring(2,3)].notes[0]);
     }
     return notesArr2;
   }
 
-  assessSinglesMissed(){//make it only return unique
+  assessSinglesMissed(){
     console.log("assessSinglesMissed()");
     let sectorsOfOne = this.getSectors(1);
     let indexHolder = [];
@@ -737,13 +664,12 @@ export class LearnerService {
         if(sectorsOfOne[element] === indexHolder[1].toString()){
           sectors.push(sectorsOfOne[element]); 
           sectorsOfOne[element] = "";
-          //sectorsOfTwo = sectorsOfTwo.filter(index => index != sectorsOfTwo[element]);
         }
         console.log(sectorsOfOne);
         
         console.log("sectors: "+sectors, "sectorsOfOne: "+sectorsOfOne[element], "indexHolder: "+indexHolder);
       }
-      //sectorsOfThree.forEach(element => element.includes(indexHolder[1].toString() ))
+
       if(sectors[0]) {
         for(let element in sectors){
           notesArr.push([this.melody[sectors[element].substring(0,1)].notes[0]]);
@@ -751,7 +677,7 @@ export class LearnerService {
       }
       
     }
-    return notesArr; //note arr
+    return notesArr;
   }
 
   assessor(){

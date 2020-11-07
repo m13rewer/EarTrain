@@ -8,6 +8,7 @@ import { LowerCasePipe } from '@angular/common';
 import { LearnerComponent } from './learner/learner.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { LearnerService } from './shared/learner.service';
 
 const appRoutes: Routes = [
   { path: 'config', component: ConfigComponent }
@@ -30,7 +31,7 @@ const appRoutes: Routes = [
     HttpClientModule
 
   ],
-  providers: [ShortCutsPipe, LowerCasePipe, ConfigComponent],
+  providers: [ShortCutsPipe, LowerCasePipe, LearnerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
